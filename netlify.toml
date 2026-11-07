@@ -1,0 +1,11 @@
+[build]
+  # Bun is fetched through npx so no Netlify-side Bun setup is needed.
+  command = "npx --yes bun install --frozen-lockfile && npx --yes bun run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+  # Makes the build output a Netlify function + static assets
+  NITRO_PRESET = "netlify"
+  # Also set in Netlify > Site configuration > Environment variables:
+  #   VITE_SUPABASE_URL, VITE_SUPABASE_PUBLISHABLE_KEY, VITE_DATA_MODE=supabase
