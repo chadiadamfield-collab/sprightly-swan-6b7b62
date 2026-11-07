@@ -14,9 +14,9 @@ import type { AppSettings, Role } from "@/lib/types";
 export const Route = createFileRoute("/admin")({
   head: () => ({
     meta: [
-      { title: "Administration — ISMAC-FLT" },
+      { title: "Réglages — ISMAC-FLT" },
       { name: "description", content: "Rôles, règles et journal d'audit." },
-      { property: "og:title", content: "Administration — ISMAC-FLT" },
+      { property: "og:title", content: "Réglages — ISMAC-FLT" },
       { property: "og:description", content: "Rôles, règles et journal d'audit." },
     ],
   }),
@@ -46,7 +46,7 @@ function AdminPage() {
   }, [db.settings]);
   if (me && me.role !== "admin")
     return (
-      <AppShell title="Admin">
+      <AppShell title="Réglages">
         <Empty>Accès réservé aux administrateurs.</Empty>
       </AppShell>
     );
@@ -110,7 +110,7 @@ function AdminPage() {
   }));
 
   return (
-    <AppShell title="Administration">
+    <AppShell title="Réglages">
       <div className="space-y-6">
         <section className="space-y-3 rounded-lg border bg-card p-4">
           <h2 className="font-semibold">Règles</h2>
@@ -131,7 +131,7 @@ function AdminPage() {
           {sw("reminder_d1", "Rappel J-1")}
           {sw("reminder_h3", "Rappel H-3")}
           {sw("show_holder_to_students", "Montrer le détenteur aux étudiants")}
-          {sw("technician_direct_checkout", "Retrait direct technicien")}
+          {sw("technician_direct_checkout", "Retrait direct administrateur")}
           <Button
             onClick={async () => {
               try {
@@ -172,8 +172,8 @@ function AdminPage() {
                   }}
                 >
                   <option value="student">Étudiant</option>
-                  <option value="technician">Technicien</option>
-                  <option value="admin">Admin</option>
+                  <option value="technician">Administrateur</option>
+                  <option value="admin">Super-admin</option>
                 </select>
               </li>
             ))}

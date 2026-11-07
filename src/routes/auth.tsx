@@ -5,7 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { getDB, resetPassword, signIn, signUp, updatePassword, useDB } from "@/lib/data";
+import {
+  getDB,
+  resetPassword,
+  signIn,
+  signOut,
+  signUp,
+  updatePassword,
+  useDB,
+} from "@/lib/data";
 import { DATA_MODE } from "@/lib/supabase";
 
 export const Route = createFileRoute("/auth")({
@@ -23,6 +31,7 @@ export const Route = createFileRoute("/auth")({
 function AuthPage() {
   const nav = useNavigate();
   const [busy, setBusy] = useState(false);
+  const [asAdmin, setAsAdmin] = useState(false);
   const go = () => {
     const me = getDB().profiles.find((p) => p.id === getDB().sessionUserId);
     nav({ to: me?.role === "student" ? "/" : "/tech", replace: true });
@@ -58,7 +67,7 @@ function AuthPage() {
       {DATA_MODE === "demo" && (
         <div className="rounded-md border border-warn bg-warn-soft p-3 text-xs text-warn">
           <b>MODE DEMO</b> — données locales fictives, base non connectée. Comptes :
-          etudiant@ismac.ma, tech@ismac.ma, admin@ismac.ma (mot de passe{" "}
+          étudiant : etudiant@ismac.ma · administrateur : tech@ismac.ma (mot de passe{" "}
           <span className="font-mono">demo1234</span>).
         </div>
       )}
@@ -103,12 +112,48 @@ function AuthPage() {
             <TabsTrigger value="reset">Oubli</TabsTrigger>
           </TabsList>
           <TabsContent value="login">
+            <div
+              role="radiogroup"
+              aria-label="Type de compte"
+              className="mt-3 grid grid-cols-2 gap-1 rounded-md border p-1"
+            >
+              {[
+                [false, "Étudiant"],
+                [true, "Administrateur"],
+              ].map(([v, l]) => (
+                <button
+                  key={String(l)}
+                  type="button"
+                  role="radio"
+                  aria-checked={asAdmin === v}
+                  onClick={() => setAsAdmin(v as boolean)}
+                  className={
+                    "rounded px-2 py-1.5 text-sm " +
+                    (asAdmin === v
+                      ? "bg-primary font-medium text-primary-foreground"
+                      : "text-muted-foreground hover:bg-secondary")
+                  }
+                >
+                  {l}
+                </button>
+              ))}
+            </div>
             <form
+              key={asAdmin ? "admin" : "student"}
               className="space-y-3 pt-3"
               onSubmit={(e) => {
                 e.preventDefault();
                 const f = new FormData(e.currentTarget);
-                void run(() => signIn(String(f.get("email")), String(f.get("password"))));
+                void run(async () => {
+                  await signIn(String(f.get("email")), String(f.get("password")));
+                  if (asAdmin) {
+                    const me = getDB().profiles.find((p) => p.id === getDB().sessionUserId);
+                    if (me?.role === "student") {
+                      await signOut();
+                      throw new Error("Ce compte n'a pas les droits administrateur.");
+                    }
+                  }
+                });
               }}
             >
               <div className="space-y-1">
@@ -119,7 +164,9 @@ function AuthPage() {
                   type="email"
                   required
                   autoComplete="email"
-                  defaultValue="etudiant@ismac.ma"
+                  defaultValue={
+                    DATA_MODE === "demo" ? (asAdmin ? "tech@ismac.ma" : "etudiant@ismac.ma") : ""
+                  }
                 />
               </div>
               <div className="space-y-1">
@@ -133,7 +180,7 @@ function AuthPage() {
                 />
               </div>
               <Button className="h-12 w-full" disabled={busy}>
-                Se connecter
+                {asAdmin ? "Connexion administrateur" : "Se connecter"}
               </Button>
             </form>
           </TabsContent>

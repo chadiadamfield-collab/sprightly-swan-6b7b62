@@ -31,8 +31,8 @@ const NAV = [
     icon: ClipboardList,
     roles: ["student", "technician", "admin"],
   },
-  { to: "/tech", label: "Console", icon: Wrench, roles: ["technician", "admin"] },
-  { to: "/admin", label: "Admin", icon: Settings, roles: ["admin"] },
+  { to: "/tech", label: "Administration", icon: Wrench, roles: ["technician", "admin"] },
+  { to: "/admin", label: "Réglages", icon: Settings, roles: ["admin"] },
 ] as const;
 
 export function useMe() {
