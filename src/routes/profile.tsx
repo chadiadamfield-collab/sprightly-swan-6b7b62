@@ -20,7 +20,7 @@ export const Route = createFileRoute("/profile")({
   component: ProfilePage,
 });
 
-const ROLE = { student: "Étudiant", technician: "Technicien", admin: "Administrateur" };
+const ROLE = { student: "Étudiant", technician: "Administrateur", admin: "Super-admin" };
 
 function ProfilePage() {
   const me = useMe();

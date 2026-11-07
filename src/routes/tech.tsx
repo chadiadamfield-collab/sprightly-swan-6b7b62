@@ -22,9 +22,9 @@ import { formatDate } from "@/lib/rules";
 export const Route = createFileRoute("/tech")({
   head: () => ({
     meta: [
-      { title: "Console technicien — ISMAC-FLT" },
+      { title: "Console administrateur — ISMAC-FLT" },
       { name: "description", content: "Opérations du jour, demandes et incidents." },
-      { property: "og:title", content: "Console technicien — ISMAC-FLT" },
+      { property: "og:title", content: "Console administrateur — ISMAC-FLT" },
       { property: "og:description", content: "Opérations du jour, demandes et incidents." },
     ],
   }),
@@ -46,8 +46,8 @@ function TechPage() {
   const [reason, setReason] = useState<Record<string, string>>({});
   if (me && me.role === "student")
     return (
-      <AppShell title="Console">
-        <Empty>Accès réservé aux techniciens.</Empty>
+      <AppShell title="Administration">
+        <Empty>Accès réservé aux administrateurs.</Empty>
       </AppShell>
     );
   const tz = db.settings.timezone;
@@ -64,7 +64,7 @@ function TechPage() {
   const openInc = db.incidents.filter((i) => i.status !== "resolved");
 
   return (
-    <AppShell title="Console technicien">
+    <AppShell title="Console administrateur">
       <div className="mb-4 grid grid-cols-4 gap-2 text-center">
         {[
           ["Demandes", pending.length],
@@ -295,7 +295,7 @@ function TechPage() {
                             setBlocked(
                               p.id,
                               !p.is_blocked,
-                              p.is_blocked ? "Débloqué par technicien" : "Blocage manuel",
+                              p.is_blocked ? "Débloqué par l'administrateur" : "Blocage manuel",
                             ),
                           "Mis à jour.",
                         )

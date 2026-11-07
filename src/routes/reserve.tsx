@@ -79,7 +79,7 @@ function ReservePage() {
     setIsSubmitting(true);
     try {
       await createReservation(sel, s, e, purpose);
-      toast.success("Demande envoyée — en attente de validation technicien.");
+      toast.success("Demande envoyée — en attente de validation administrateur.");
       nav({ to: "/loans" });
     } catch (err) {
       toast.error((err as Error).message);

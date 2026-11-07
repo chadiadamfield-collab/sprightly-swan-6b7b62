@@ -135,7 +135,7 @@ function seed(): DB {
     },
     {
       id: "u-tech",
-      full_name: "Karim Technicien",
+      full_name: "Karim Administrateur",
       email: "tech@ismac.ma",
       promo: "—",
       role: "technician",
@@ -390,7 +390,7 @@ export function createReservation(equipmentIds: string[], start: Date, end: Date
   commit((d) => {
     const p = me(d);
     if (p.is_blocked)
-      throw new AppError("Compte bloqué : réservation impossible. Contactez un technicien.");
+      throw new AppError("Compte bloqué : réservation impossible. Contactez un administrateur.");
     if (!equipmentIds.length) throw new AppError("Sélectionnez au moins un équipement.");
     if (purpose.trim().length < 3) throw new AppError("Motif / projet obligatoire.");
     const err = validateReservationWindow(start, end, d.settings);
@@ -698,7 +698,7 @@ export function directCheckout(equipmentId: string, borrowerId: string, dueAt: D
       borrower_id: b.id,
       start_at: start.toISOString(),
       due_at: dueAt.toISOString(),
-      purpose: "Retrait direct technicien",
+      purpose: "Retrait direct administrateur",
       status: "active",
       decided_by: p.id,
       created_at: nowIso(),

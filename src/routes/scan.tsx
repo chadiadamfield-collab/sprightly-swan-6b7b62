@@ -158,7 +158,7 @@ function ScanPage() {
                   </>
                 ) : (
                   <p className="rounded-md bg-warn-soft p-3 text-sm text-warn">
-                    Présentez l'objet au technicien : il confirme la restitution physique.
+                    Présentez l'objet à l'administrateur : il confirme la restitution physique.
                   </p>
                 )
               ) : (
@@ -213,7 +213,7 @@ function ScanPage() {
                   onClick={() =>
                     act(
                       async () => reportIncident(e.id, desc, await readPhoto(file), ctx.item.id),
-                      "Incident créé, technicien notifié.",
+                      "Incident créé, administrateur notifié.",
                     )
                   }
                 >
